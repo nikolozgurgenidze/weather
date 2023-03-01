@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Weather</title>
+</head>
+<body>
+    <div class="background">
+        <header>
+            <div class="container">
+                <div class="header-wrapper flex">
+                    <div class="header-left-side flex">
+                        <div class="cloud-wrapper">
+                            <a href="">
+                                <img src="Union.png" alt="Cloud">
+                            </a>
+                        </div>
+                        <h1>Weather By Vicbox</h1>
+                    </div>
+                    <div class="header-right-side">
+                        <nav>
+                            <ul class="flex">
+                                <li>
+                                    <a href="https://github.com/nikolozgurgenidze">
+                                        Github link
+                                    </a>
+                                </li>
+                                <li class="about">
+                                    <a href="#">
+                                    About 
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section>
+            <div class="container">
+                <div class="middle-wrapper">
+                    <div class="weather-box" id="weatherBox">
+                        
+                    </div>
+                    <div class="weather-box-empty flex">
+                        <div class="location-button-wrapper flex">
+                            <img src="Rectangle 38.png" alt="Location button">
+                        </div>
+                        <p>
+                            Add new location
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script>
+        const weatherBox = document.getElementById('weatherBox')
+        const getWeather = async () => {
+            try {
+                const lat = 41.643414;
+                const lon = 41.639900;
+                const key = 'cddd5a4f4e270cdba18687f3b46a5766'
+                const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}`)
+                const data = await response.json()
+
+                if (response.status === 401) {
+                    const errorText = document.createElement('p')
+                    errorText.textContent = response.statusText
+                    weatherBox.appendChild(errorText)
+                } else {
+
+                    const topContent = document.createElement('div')
+                    const cloud = document.createElement('p')
+                    const cloudWrapper = document.createElement('div')
+                    const celsiusWrapper = document.createElement('div')
+                    const country = document.createElement('h2')
+                    const h1 = document.createElement('h1')
+
+                    const bottomWrapper = document.createElement('div')
+                    const firstRow = document.createElement('div')
+                    const secondRow = document.createElement('div')
+
+                    const visibWrapper = document.createElement('div')
+                    const feelsLikeWrapper = document.createElement('div')
+                    const humidityWrapper = document.createElement('div')
+                    const windWrapper = document.createElement('div')
+
+                    const visib = document.createElement('p')
+                    const feelsLike = document.createElement('p')
+                    const humidity = document.createElement('p')
+                    const wind = document.createElement('p')
+
+                    h1.textContent = Math.round(data.main.temp - 273.15)
+                    cloud.textContent = data.weather[0].main
+                    country.textContent = `${data.name}, ${data.sys.country}`
+                    visib.textContent = ` Visibility ${Math.round(data.visibility / 1000)} KM`
+                    feelsLike.textContent = ` Feels Like ${Math.round(data.main.feels_like - 273.15)} C`
+                    humidity.textContent = ` Humidity ${data.main.humidity}%`
+                    wind.textContent = ` Wind ${data.wind.speed} KM`
+
+                    h1.classList.add('title')
+                    topContent.classList.add('box-top-content')
+                    cloudWrapper.classList.add('box-cloud-wrapper')
+                    celsiusWrapper.classList.add('celsius-wrapper')
+                    firstRow.classList.add('first-row')
+                    secondRow.classList.add('second-row')
+                    visibWrapper.classList.add('visib-wrapper')
+                    feelsLikeWrapper.classList.add('feels-wrapper')
+                    humidityWrapper.classList.add('humidity-wrapper')
+                    windWrapper.classList.add('wind-wrapper')
+                    bottomWrapper.classList.add('bottom-wrapper')
+
+                    const img = document.createElement('img')
+                    img.setAttribute('src', `http://openweathermap.org/img/w/${data.weather[0].icon}.png`)
+                    img.classList.add('weather-icon')
+
+
+                    weatherBox.appendChild(topContent)
+                    cloudWrapper.appendChild(img)
+                    topContent.appendChild(cloudWrapper)
+                    topContent.appendChild(country)
+                    weatherBox.appendChild(celsiusWrapper)
+                    celsiusWrapper.appendChild(h1)
+                    celsiusWrapper.appendChild(cloud)
+                    weatherBox.appendChild(bottomWrapper)
+                    bottomWrapper.appendChild(firstRow)
+                    bottomWrapper.appendChild(secondRow)
+                    firstRow.appendChild(visibWrapper)
+                    secondRow.appendChild(feelsLikeWrapper)
+                    firstRow.appendChild(humidityWrapper)
+                    secondRow.appendChild(windWrapper)
+
+                    visibWrapper.appendChild(visibLogo)
+                    feelsLikeWrapper.appendChild(temperatureLogo)
+                    humidityWrapper.appendChild(humidityLogo)
+                    windWrapper.appendChild(windLogo)
+
+                    visibWrapper.appendChild(visib)
+                    feelsLikeWrapper.appendChild(feelsLike)
+                    humidityWrapper.appendChild(humidity)
+                    windWrapper.appendChild(wind)
+                }
+
+
+            }
+            catch (e) {
+                console.log(e)
+            }
+
+
+            }
+            getWeather()
+    </script>
+</body>
+</html>
